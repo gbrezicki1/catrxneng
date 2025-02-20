@@ -2,8 +2,9 @@ from .utils import dH, S
 
 
 class CO:
-    def __init__(self, T):
-        self.T = T
+    def __init__(self, T_C):
+        self.T_C = T_C
+        self.T_K = T_C + 273
         self.Hf_298 = -110530  # J/mol
         self.S_298 = 197.66  # J/mol
         self.thermo_params = {
