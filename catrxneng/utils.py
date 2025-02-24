@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def dH(species):
+def dHf(species):
     t = species.T_K / 1000
     params = species.thermo_params
     return (
@@ -12,18 +12,20 @@ def dH(species):
         - params["E"] / t
         + params["F"]
         - params["H"]
-    )
+    )  # kJ/mol
 
 
-def S(species):
+def Sf(species):
     t = species.T_K / 1000
     params = species.thermo_params
     return (
-        params["A"] *
-          np.log(t)
+        params["A"] * np.log(t)
         + params["B"] * t
         + params["C"] * t**2 / 2
         + params["D"] * t**3 / 3
         - params["E"] / (2 * t**2)
         + params["G"]
-    )
+    ) / 1000  # kJ/mol
+
+def Gf(species):
+    return species.Hf() - species.T_K * species.Sf() # kJ/mol
