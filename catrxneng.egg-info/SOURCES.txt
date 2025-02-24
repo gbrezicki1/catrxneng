@@ -9,12 +9,17 @@ catrxneng.egg-info/top_level.txt
 catrxneng/constants/__init__.py
 catrxneng/constants/file.py
 catrxneng/reactions/__init__.py
+catrxneng/reactions/co2_fts.py
+catrxneng/reactions/fts.py
 catrxneng/reactions/reaction.py
 catrxneng/reactions/rwgs.py
+catrxneng/reactions/sabatier.py
 catrxneng/reactions/wgs.py
 catrxneng/reactors/__init__.py
 catrxneng/reactors/pfr.py
 catrxneng/species/__init__.py
+catrxneng/species/c2h4.py
+catrxneng/species/ch4.py
 catrxneng/species/co.py
 catrxneng/species/co2.py
 catrxneng/species/h2.py

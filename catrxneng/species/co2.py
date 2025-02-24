@@ -3,9 +3,8 @@ from ..utils import dHf, Sf, Gf
 
 
 class CO2(Species):
-    def __init__(self, T_C):
-        self.T_C = T_C
-        self.T_K = self.T_C + 273
+    def __init__(self, T_C,nu=None):
+        super().__init__(T_C, nu)
         self.min_temp_K = 298
         self.max_temp_K = 1200
         self.check_temps()

@@ -25,7 +25,7 @@ def Sf(species):
         + params["D"] * t**3 / 3
         - params["E"] / (2 * t**2)
         + params["G"]
-    ) / 1000  # kJ/mol
+    ) / 1000  # kJ/mol/K
 
 def Gf(species):
     return species.Hf() - species.T_K * species.Sf() # kJ/mol

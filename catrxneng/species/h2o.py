@@ -3,9 +3,8 @@ from .species import Species
 
 
 class H2O(Species):
-    def __init__(self, T_C):
-        self.T_C = T_C
-        self.T_K = self.T_C + 273
+    def __init__(self, T_C, nu=None):
+        super().__init__(T_C, nu)
         self.min_temp_K = 500
         self.max_temp_K = 1700
         self.check_temps()

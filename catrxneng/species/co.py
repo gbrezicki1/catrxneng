@@ -3,10 +3,9 @@ from .species import Species
 
 
 class CO(Species):
-    def __init__(self, T_C):
+    def __init__(self, T_C, nu=None):
         # https://webbook.nist.gov/cgi/cbook.cgi?ID=C630080&Units=SI&Mask=1#Thermo-Gas
-        self.T_C = T_C
-        self.T_K = self.T_C + 273
+        super().__init__(T_C, nu)
         self.min_temp_K = 298
         self.max_temp_K = 1300
         self.check_temps()
