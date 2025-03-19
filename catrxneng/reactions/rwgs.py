@@ -1,5 +1,4 @@
 from scipy.optimize import fsolve
-import numpy as np
 from .reaction import Reaction
 from ..species import CO2, H2, CO, H2O
 
@@ -19,7 +18,7 @@ class RWGS(Reaction):
     def dS_rxn(self):
         return self.co.Sf() + self.h2o.Sf() - self.co2.Sf() - self.h2.Sf()
 
-    def Xeq(self, p0):
+    def eq_conv(self, p0):
         def f(extent):
             Keq = (
                 (p0[2] + extent)

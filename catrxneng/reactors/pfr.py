@@ -6,17 +6,16 @@ from ..constants import *
 
 
 class PFR:
-    def __init__(self, w, P, whsv, y0, r):
+    def __init__(self, components, w, P, ghsv, p0, r):
+        self.components = components
         self.w = w  # gcat
         self.P = P  # bara
-        self.whsv = whsv  # mmol/min/gcat
-        self.y0 = y0
-        self.Ft0 = whsv * w  # mmol/min
-        self.F0 = y0 * self.Ft0  # mmol/min
-        self.nmlm = self.F0 * mol_gas_vol["nL/mol"]  # normal mL/min
-        self.total_nmlm = self.nmlm.sum()
+        self.ghsv = ghsv  # smL/min/gcat
+        self.p0 = p0
+        self.Ft0 = ghsv / mol_gas_vol / 60  # mmol/min
+        self.y0 = p0 / P
+        self.F0 = self.y0 * self.Ft0  # mmol/min
         self.r = r  # mmol/min/gcat
-        self.solve()
 
     def solve(self):
         def df(w, F):
@@ -40,7 +39,8 @@ class PFR:
         self.y = []
         for Fi in self.F:
             self.y.append(Fi / Ft)
-        self.X = (self.F0[0] - self.F[0]) / self.F0[0] * 100
+        self.conv = (self.F0[0] - self.F[0]) / self.F0[0] * 100
+        self.inv_ghsv = self.w / self.Ft0
 
     def plot_molfrac_vs_w(self, labels):
         fig = go.Figure()
@@ -56,14 +56,14 @@ class PFR:
         )
         fig.show()
 
-    def plot_conv_vs_w(self, label, Xeq=None):
+    def plot_conv_vs_w(self, label, eq_conv=None):
         fig = go.Figure()
         trace = go.Scatter(x=self.w, y=self.X, mode="lines", name=label)
         fig.add_trace(trace)
-        if Xeq:
+        if eq_conv:
             trace = go.Scatter(
                 x=self.w,
-                y=np.zeros(len(self.w)) + Xeq,
+                y=np.zeros(len(self.w)) + eq_conv,
                 mode="lines",
                 name=f"Equilibrium {label}",
             )
@@ -72,6 +72,42 @@ class PFR:
             title=dict(text="<b>Conversion vs. catalyst mass</b>", x=0.5),
             xaxis_title="<b>Catalyst mass (g)</b>",
             yaxis_title="<b>Conversion (%)</b>",
+            width=800,
+        )
+        fig.show()
+
+    def plot_conv_vs_inv_ghsv(self, label, eq_conv=None):
+        fig = go.Figure()
+        trace = go.Scatter(x=self.inv_ghsv, y=self.X, mode="lines", name=label)
+        fig.add_trace(trace)
+        if eq_conv:
+            trace = go.Scatter(
+                x=self.inv_ghsv,
+                y=np.zeros(len(self.w)) + eq_conv,
+                mode="lines",
+                name=f"Equilibrium {label}",
+            )
+            fig.add_trace(trace)
+        fig.update_layout(
+            title=dict(text="<b>Conversion vs. 1/ghsv</b>", x=0.5),
+            xaxis_title="<b>1/ghsv (mmol<sup>-1</sub> min gcat)</b>",
+            yaxis_title="<b>Conversion (%)</b>",
+            width=800,
+        )
+        fig.show()
+
+    def plot_molfracs_vs_inv_ghsv(self, labels):
+        fig = go.Figure()
+        for i, label in enumerate(labels):
+            if label != "inert":
+                trace = go.Scatter(
+                    x=self.inv_ghsv, y=self.y[i], mode="lines", name=label
+                )
+                fig.add_trace(trace)
+        fig.update_layout(
+            title=dict(text="<b>Mole fractions vs. 1/ghsv</b>", x=0.5),
+            xaxis_title="<b>1/ghsv (mmol<sup>-1</sub> min gcat)</b>",
+            yaxis_title="<b>Mole fraction</b>",
             width=800,
         )
         fig.show()

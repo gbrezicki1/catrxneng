@@ -18,7 +18,7 @@ class CO2FTS(Reaction):
     def dS_rxn(self):
         return self.c2h4.Sf() + 4 * self.h2o.Sf() - 2 * self.co2.Sf() - 6 * self.h2.Sf()
 
-    def Xeq(self, p0):
+    def eq_conv(self, p0):
         def f(extent):
             Keq = (
                 (p0[2] + extent)

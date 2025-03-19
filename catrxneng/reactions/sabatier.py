@@ -18,7 +18,7 @@ class Sabatier(Reaction):
     def dS_rxn(self):
         return self.ch4.Sf() + 2 * self.h2o.Sf() - self.co2.Sf() - 4 * self.h2.Sf()
 
-    def Xeq(self, p0):
+    def eq_conv(self, p0):
         def f(extent):
             Keq = (
                 (p0[2] + extent)
